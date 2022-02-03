@@ -9,7 +9,7 @@ VYSKA = 500
 VYSKA_PODSTAVY = 15
 SIRKA_PODSTAVY = 50
 SIRKA_PREKAZKY = 30
-MEDZERA = 80
+MEDZERA = 80 #medzera medzi hornou a dolnou castou prekazky
 
 #HRAC
 VYSKA_HRACA = 30
@@ -49,9 +49,49 @@ def vykresli_podlahu():
         50
     )
 
+def vykresli_prekazku1():
+    #dolna cast
+    #__________
+    #vykresli podstavu
+    gl.glColor3f(0.11, 0.59 , 0.11 )
+    vykresli_obdlznik(
+        pozicia_prekazky1[0] - SIRKA_PODSTAVY//2,
+        pozicia_prekazky1[1] - MEDZERA//2 - VYSKA_PODSTAVY,
+        pozicia_prekazky1[0] + SIRKA_PODSTAVY//2,
+        pozicia_prekazky1[1] - MEDZERA//2
+    )
+    #vykresli cast pod podstavou
+    gl.glColor3f(0.1, 0.8, 0.1)
+    vykresli_obdlznik(
+        pozicia_prekazky1[0] - SIRKA_PREKAZKY//2,
+        0,
+        pozicia_prekazky1[0] + SIRKA_PREKAZKY//2,
+        pozicia_prekazky1[1]-MEDZERA//2-VYSKA_PODSTAVY
+    )
+    #horna cast
+    gl.glColor3f(0.11,0.59,0.11)
+    vykresli_obdlznik(
+        pozicia_prekazky1[0] - SIRKA_PODSTAVY//2,
+        pozicia_prekazky1[1] + MEDZERA//2,
+        pozicia_prekazky1[0] + SIRKA_PODSTAVY//2,
+        pozicia_prekazky1[1] + MEDZERA//2 + VYSKA_PODSTAVY
+    )
+    #vykresli cast nad hornou podstavou
+    gl.glColor3f(0.1, 0.8, 0.1)
+    vykresli_obdlznik(
+        pozicia_prekazky1[0] - SIRKA_PREKAZKY//2,
+        pozicia_prekazky1[1]+MEDZERA//2+VYSKA_PODSTAVY,
+        pozicia_prekazky1[0] + SIRKA_PREKAZKY//2,
+        VYSKA
+    )
+
+
+
 def vykresli():
     vykresli_pozadie()
+    vykresli_prekazku1()
     vykresli_podlahu()
+    
 
 window = pyglet.window.Window(width=SIRKA,height=VYSKA)
 window.push_handlers(
