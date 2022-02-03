@@ -1,8 +1,9 @@
 import pyglet
 from pyglet import gl
+from random import randint
 
 #OKNO
-SIRKA = 925
+SIRKA = 1000
 VYSKA = 500
 
 RYCHLOST = 100
@@ -18,9 +19,10 @@ VYSKA_HRACA = 30
 SIRKA_HRACA = 30
 
 pozicia_hraca = [100,200]
-pozicia_prekazky1 = [300,250]
-pozicia_prekazky2 = [600,200]
-pozicia_prekazky3 = [900,300]
+pozicia_prekazky1 = [275,250]
+pozicia_prekazky2 = [575,200]
+pozicia_prekazky3 = [875,300]
+pozicia_prekazky4 = [-25, 100]
 body = [0]
 
 def vykresli_obdlznik(x1,y1,x2,y2):
@@ -156,7 +158,41 @@ def vykresli_prekazku3():
         pozicia_prekazky3[0] + SIRKA_PREKAZKY//2,
         VYSKA
     )
-
+def vykresli_prekazku4():
+    #dolna cast
+    #__________
+    #vykresli podstavu
+    gl.glColor3f(0.11, 0.59 , 0.11 )
+    vykresli_obdlznik(
+        pozicia_prekazky4[0] - SIRKA_PODSTAVY//2,
+        pozicia_prekazky4[1] - MEDZERA//2 - VYSKA_PODSTAVY,
+        pozicia_prekazky4[0] + SIRKA_PODSTAVY//2,
+        pozicia_prekazky4[1] - MEDZERA//2
+    )
+    #vykresli cast pod podstavou
+    gl.glColor3f(0.1, 0.8, 0.1)
+    vykresli_obdlznik(
+        pozicia_prekazky4[0] - SIRKA_PREKAZKY//2,
+        0,
+        pozicia_prekazky4[0] + SIRKA_PREKAZKY//2,
+        pozicia_prekazky4[1]-MEDZERA//2-VYSKA_PODSTAVY
+    )
+    #horna cast
+    gl.glColor3f(0.11,0.59,0.11)
+    vykresli_obdlznik(
+        pozicia_prekazky4[0] - SIRKA_PODSTAVY//2,
+        pozicia_prekazky4[1] + MEDZERA//2,
+        pozicia_prekazky4[0] + SIRKA_PODSTAVY//2,
+        pozicia_prekazky4[1] + MEDZERA//2 + VYSKA_PODSTAVY
+    )
+    #vykresli cast nad hornou podstavou
+    gl.glColor3f(0.1, 0.8, 0.1)
+    vykresli_obdlznik(
+        pozicia_prekazky4[0] - SIRKA_PREKAZKY//2,
+        pozicia_prekazky4[1] + MEDZERA//2 + VYSKA_PODSTAVY,
+        pozicia_prekazky4[0] + SIRKA_PREKAZKY//2,
+        VYSKA
+    )
 
 
 def vykresli():
@@ -164,9 +200,23 @@ def vykresli():
     vykresli_prekazku1()
     vykresli_prekazku2()
     vykresli_prekazku3()
+    vykresli_prekazku4()
     vykresli_podlahu()
     
 def obnov_stav(dt):
+    #premiestnenie prekazok, keď prídu na koniec tak sa premiestnia na začiatok s náhodonou y-ovou súradnicou
+    if pozicia_prekazky1[0] < 0-SIRKA_PODSTAVY//2:
+        nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
+        pozicia_prekazky1[0] = SIRKA + SIRKA_PODSTAVY//2
+        pozicia_prekazky1[1] = nova_pozicia
+    if pozicia_prekazky2[0] < 0-SIRKA_PODSTAVY//2:
+        nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
+        pozicia_prekazky2[0] = SIRKA + SIRKA_PODSTAVY//2
+        pozicia_prekazky2[1] = nova_pozicia
+    if pozicia_prekazky3[0] < 0-SIRKA_PODSTAVY//2:
+        nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
+        pozicia_prekazky3[0] = SIRKA + SIRKA_PODSTAVY//2
+        pozicia_prekazky3[1] = nova_pozicia
     #pohyb prekazok
     pozicia_prekazky1[0] -= RYCHLOST * dt
     pozicia_prekazky2[0] -= RYCHLOST * dt
@@ -178,6 +228,6 @@ window.push_handlers(
     
 )
 #nastavenie FPS na 60 kvôli výpočtom
-pyglet.clock.schedule_interval(obnov_stav, 1/60)
+#pyglet.clock.schedule_interval(obnov_stav, 1/60)
 
 pyglet.app.run() 
