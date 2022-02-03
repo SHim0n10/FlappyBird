@@ -5,6 +5,8 @@ from pyglet import gl
 SIRKA = 925
 VYSKA = 500
 
+RYCHLOST = 100
+
 #PREKAZKA
 VYSKA_PODSTAVY = 15
 SIRKA_PODSTAVY = 50
@@ -84,7 +86,6 @@ def vykresli_prekazku1():
         pozicia_prekazky1[0] + SIRKA_PREKAZKY//2,
         VYSKA
     )
-
 def vykresli_prekazku2():
     #dolna cast
     #__________
@@ -120,7 +121,6 @@ def vykresli_prekazku2():
         pozicia_prekazky2[0] + SIRKA_PREKAZKY//2,
         VYSKA
     )
-
 def vykresli_prekazku3():
     #dolna cast
     #__________
@@ -166,12 +166,18 @@ def vykresli():
     vykresli_prekazku3()
     vykresli_podlahu()
     
+def obnov_stav(dt):
+    #pohyb prekazok
+    pozicia_prekazky1[0] -= RYCHLOST * dt
+    pozicia_prekazky2[0] -= RYCHLOST * dt
+    pozicia_prekazky3[0] -= RYCHLOST * dt
 
 window = pyglet.window.Window(width=SIRKA,height=VYSKA)
 window.push_handlers(
     on_draw=vykresli,
-
+    
 )
-
+#nastavenie FPS na 60 kvôli výpočtom
+pyglet.clock.schedule_interval(obnov_stav, 1/60)
 
 pyglet.app.run() 
