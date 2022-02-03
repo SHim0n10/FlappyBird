@@ -80,8 +80,80 @@ def vykresli_prekazku1():
     gl.glColor3f(0.1, 0.8, 0.1)
     vykresli_obdlznik(
         pozicia_prekazky1[0] - SIRKA_PREKAZKY//2,
-        pozicia_prekazky1[1]+MEDZERA//2+VYSKA_PODSTAVY,
+        pozicia_prekazky1[1] + MEDZERA//2 + VYSKA_PODSTAVY,
         pozicia_prekazky1[0] + SIRKA_PREKAZKY//2,
+        VYSKA
+    )
+
+def vykresli_prekazku2():
+    #dolna cast
+    #__________
+    #vykresli podstavu
+    gl.glColor3f(0.11, 0.59 , 0.11 )
+    vykresli_obdlznik(
+        pozicia_prekazky2[0] - SIRKA_PODSTAVY//2,
+        pozicia_prekazky2[1] - MEDZERA//2 - VYSKA_PODSTAVY,
+        pozicia_prekazky2[0] + SIRKA_PODSTAVY//2,
+        pozicia_prekazky2[1] - MEDZERA//2
+    )
+    #vykresli cast pod podstavou
+    gl.glColor3f(0.1, 0.8, 0.1)
+    vykresli_obdlznik(
+        pozicia_prekazky2[0] - SIRKA_PREKAZKY//2,
+        0,
+        pozicia_prekazky2[0] + SIRKA_PREKAZKY//2,
+        pozicia_prekazky2[1]-MEDZERA//2-VYSKA_PODSTAVY
+    )
+    #horna cast
+    gl.glColor3f(0.11,0.59,0.11)
+    vykresli_obdlznik(
+        pozicia_prekazky2[0] - SIRKA_PODSTAVY//2,
+        pozicia_prekazky2[1] + MEDZERA//2,
+        pozicia_prekazky2[0] + SIRKA_PODSTAVY//2,
+        pozicia_prekazky2[1] + MEDZERA//2 + VYSKA_PODSTAVY
+    )
+    #vykresli cast nad hornou podstavou
+    gl.glColor3f(0.1, 0.8, 0.1)
+    vykresli_obdlznik(
+        pozicia_prekazky2[0] - SIRKA_PREKAZKY//2,
+        pozicia_prekazky2[1] + MEDZERA//2 + VYSKA_PODSTAVY,
+        pozicia_prekazky2[0] + SIRKA_PREKAZKY//2,
+        VYSKA
+    )
+
+def vykresli_prekazku3():
+    #dolna cast
+    #__________
+    #vykresli podstavu
+    gl.glColor3f(0.11, 0.59 , 0.11 )
+    vykresli_obdlznik(
+        pozicia_prekazky3[0] - SIRKA_PODSTAVY//2,
+        pozicia_prekazky3[1] - MEDZERA//2 - VYSKA_PODSTAVY,
+        pozicia_prekazky3[0] + SIRKA_PODSTAVY//2,
+        pozicia_prekazky3[1] - MEDZERA//2
+    )
+    #vykresli cast pod podstavou
+    gl.glColor3f(0.1, 0.8, 0.1)
+    vykresli_obdlznik(
+        pozicia_prekazky3[0] - SIRKA_PREKAZKY//2,
+        0,
+        pozicia_prekazky3[0] + SIRKA_PREKAZKY//2,
+        pozicia_prekazky3[1]-MEDZERA//2-VYSKA_PODSTAVY
+    )
+    #horna cast
+    gl.glColor3f(0.11,0.59,0.11)
+    vykresli_obdlznik(
+        pozicia_prekazky3[0] - SIRKA_PODSTAVY//2,
+        pozicia_prekazky3[1] + MEDZERA//2,
+        pozicia_prekazky3[0] + SIRKA_PODSTAVY//2,
+        pozicia_prekazky3[1] + MEDZERA//2 + VYSKA_PODSTAVY
+    )
+    #vykresli cast nad hornou podstavou
+    gl.glColor3f(0.1, 0.8, 0.1)
+    vykresli_obdlznik(
+        pozicia_prekazky3[0] - SIRKA_PREKAZKY//2,
+        pozicia_prekazky3[1] + MEDZERA//2 + VYSKA_PODSTAVY,
+        pozicia_prekazky3[0] + SIRKA_PREKAZKY//2,
         VYSKA
     )
 
@@ -90,6 +162,8 @@ def vykresli_prekazku1():
 def vykresli():
     vykresli_pozadie()
     vykresli_prekazku1()
+    vykresli_prekazku2()
+    vykresli_prekazku3()
     vykresli_podlahu()
     
 
