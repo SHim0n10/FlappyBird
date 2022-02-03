@@ -8,7 +8,7 @@ from random import *
 SIRKA = 925
 VYSKA = 500
 
-RYCHLOST = 100  
+RYCHLOST = 100
 
 #PREKAZKA
 VYSKA_PODSTAVY = 15
@@ -181,6 +181,7 @@ rychlost_hraca1 = 0
 
 def obnov_stav(dt):
     #pohyb hraca
+    print(dt)
     rychlost_hraca1 = int(rychlost_hraca[0])
     if stisknuta_klavesnica[0] == 1:
         pozicia_hraca[1] += rychlost_hraca1 * dt
@@ -237,7 +238,7 @@ window.push_handlers(
     on_key_press=stisk_klavesnice,
     on_key_release=pusti_klavesnice
 )
-pyglet.clock.schedule(obnov_stav)
+pyglet.clock.schedule_interval(obnov_stav, 1/165)
 
 
 pyglet.app.run() 
