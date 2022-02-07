@@ -205,29 +205,33 @@ def vykresli():
     
 def obnov_stav(dt):
     #premiestnenie prekazok, keď prídu na koniec tak sa premiestnia na začiatok s náhodonou y-ovou súradnicou
-    if pozicia_prekazky1[0] < 0-SIRKA_PODSTAVY//2:
+    if pozicia_prekazky1[0] < -175:
         nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
         pozicia_prekazky1[0] = SIRKA + SIRKA_PODSTAVY//2
         pozicia_prekazky1[1] = nova_pozicia
-    if pozicia_prekazky2[0] < 0-SIRKA_PODSTAVY//2:
+    if pozicia_prekazky2[0] < -175:
         nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
         pozicia_prekazky2[0] = SIRKA + SIRKA_PODSTAVY//2
         pozicia_prekazky2[1] = nova_pozicia
-    if pozicia_prekazky3[0] < 0-SIRKA_PODSTAVY//2:
+    if pozicia_prekazky3[0] < -175:
         nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
         pozicia_prekazky3[0] = SIRKA + SIRKA_PODSTAVY//2
         pozicia_prekazky3[1] = nova_pozicia
+    if pozicia_prekazky4[0] < -175:
+        nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
+        pozicia_prekazky4[0] = SIRKA + SIRKA_PODSTAVY//2
+        pozicia_prekazky4[1] = nova_pozicia
     #pohyb prekazok
     pozicia_prekazky1[0] -= RYCHLOST * dt
     pozicia_prekazky2[0] -= RYCHLOST * dt
     pozicia_prekazky3[0] -= RYCHLOST * dt
+    pozicia_prekazky4[0] -= RYCHLOST * dt
 
 window = pyglet.window.Window(width=SIRKA,height=VYSKA)
 window.push_handlers(
-    on_draw=vykresli,
-    
+    on_draw=vykresli
 )
 #nastavenie FPS na 60 kvôli výpočtom
-#pyglet.clock.schedule_interval(obnov_stav, 1/60)
+pyglet.clock.schedule_interval(obnov_stav, 1/60)
 
-pyglet.app.run() 
+pyglet.app.run()
