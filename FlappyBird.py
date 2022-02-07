@@ -24,6 +24,11 @@ pozicia_prekazky2 = [575,200]
 pozicia_prekazky3 = [875,300]
 pozicia_prekazky4 = [-25, 100]
 body = [0]
+#pridanie obrázku
+flappy = pyglet.image.load('flappy3.png')
+hrac = pyglet.sprite.Sprite(flappy)
+
+
 
 def vykresli_obdlznik(x1,y1,x2,y2):
     gl.glBegin(gl.GL_TRIANGLE_FAN)  
@@ -202,6 +207,7 @@ def vykresli():
     vykresli_prekazku3()
     vykresli_prekazku4()
     vykresli_podlahu()
+    hrac.draw()
     
 def obnov_stav(dt):
     #premiestnenie prekazok, keď prídu na koniec tak sa premiestnia na začiatok s náhodonou y-ovou súradnicou
