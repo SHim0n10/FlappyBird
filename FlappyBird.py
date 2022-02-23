@@ -1,10 +1,14 @@
 import pyglet
 from pyglet import gl
 from random import randint
+from pyglet.window import key
+import time
 
 #OKNO
 SIRKA = 1000
 VYSKA = 500
+
+VELKOST_FONTU = 42
 
 RYCHLOST = 100
 
@@ -12,22 +16,42 @@ RYCHLOST = 100
 VYSKA_PODSTAVY = 15
 SIRKA_PODSTAVY = 50
 SIRKA_PREKAZKY = 30
-MEDZERA = 80 #medzera medzi hornou a dolnou castou prekazky
+MEDZERA = 120 #medzera medzi hornou a dolnou castou prekazky
 
 #HRAC
-VYSKA_HRACA = 30
-SIRKA_HRACA = 30
+VYSKA_HRACA = 20
+SIRKA_HRACA = 26
 
-pozicia_hraca = [100,200]
-pozicia_prekazky1 = [275,250]
-pozicia_prekazky2 = [575,200]
-pozicia_prekazky3 = [875,300]
-pozicia_prekazky4 = [-25, 100]
-body = [0]
+pozicia_hraca = [100,250]
+pozicia_prekazky1 = [800,250]
+pozicia_prekazky2 = [1100,200]
+pozicia_prekazky3 = [1400,300]
+pozicia_prekazky4 = [1700, 100]
+body = 0
+stisknuta_klavesnica = [0]
+rychlost_hraca_y = [1]
+moznost_skakat = [1]
+moznost_hrat = [0]
+zaciatok = [0]
+najvyssie_skore = [0]
+
 #pridanie obrázku
 flappy = pyglet.image.load('flappy3.png')
+flappy_down = pyglet.image.load('flappy_down.png')
 hrac = pyglet.sprite.Sprite(flappy)
+hrac.x = pozicia_hraca[0]
+hrac.y = pozicia_hraca[1]
 
+#zmena flappy_bird obrazku
+# def zmen(t):
+#     hrac.image = flappy_down
+#     pyglet.clock.schedule_once(zmen_nazad, 1)
+
+# def zmen_nazad(t):
+#     hrac.image = flappy
+#     pyglet.clock.schedule_interval(zmen, 1)
+
+# pyglet.clock.schedule_interval(zmen, 1)
 
 
 def vykresli_obdlznik(x1,y1,x2,y2):
@@ -57,6 +81,9 @@ def vykresli_podlahu():
         SIRKA,
         50
     )
+def nakresli_text(text, x ,y, pozice_x):
+    napis = pyglet.text.Label(text, font_size=VELKOST_FONTU, x=x, y=y, anchor_x=pozice_x)
+    napis.draw()
 
 def vykresli_prekazku1():
     #dolna cast
@@ -208,34 +235,119 @@ def vykresli():
     vykresli_prekazku4()
     vykresli_podlahu()
     hrac.draw()
+    nakresli_text(str(body), SIRKA - 5, VYSKA - 50, 'right')
+    if moznost_hrat[0] == 0:
+        nakresli_text("To START press SPACE", SIRKA//2, VYSKA//2 + 45, 'center')
+        nakresli_text("HIGH SCORE: "+str(najvyssie_skore[0]),SIRKA//2, VYSKA//2 - 45, 'center')
+    elif moznost_hrat[0] == 2:
+        nakresli_text("GAME OVER", SIRKA//2, VYSKA//2 + 45, 'center')
+        nakresli_text("Press SPACE to RESTART", SIRKA//2, VYSKA//2 - 45, 'center')
     
 def obnov_stav(dt):
-    #premiestnenie prekazok, keď prídu na koniec tak sa premiestnia na začiatok s náhodonou y-ovou súradnicou
-    if pozicia_prekazky1[0] < -175:
-        nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
-        pozicia_prekazky1[0] = SIRKA + SIRKA_PODSTAVY//2
-        pozicia_prekazky1[1] = nova_pozicia
-    if pozicia_prekazky2[0] < -175:
-        nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
-        pozicia_prekazky2[0] = SIRKA + SIRKA_PODSTAVY//2
-        pozicia_prekazky2[1] = nova_pozicia
-    if pozicia_prekazky3[0] < -175:
-        nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
-        pozicia_prekazky3[0] = SIRKA + SIRKA_PODSTAVY//2
-        pozicia_prekazky3[1] = nova_pozicia
-    if pozicia_prekazky4[0] < -175:
-        nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
-        pozicia_prekazky4[0] = SIRKA + SIRKA_PODSTAVY//2
-        pozicia_prekazky4[1] = nova_pozicia
-    #pohyb prekazok
-    pozicia_prekazky1[0] -= RYCHLOST * dt
-    pozicia_prekazky2[0] -= RYCHLOST * dt
-    pozicia_prekazky3[0] -= RYCHLOST * dt
-    pozicia_prekazky4[0] -= RYCHLOST * dt
+    if zaciatok[0] == 1:
+        if moznost_hrat[0] == 1:
+        #premiestnenie prekazok, keď prídu na koniec tak sa premiestnia na začiatok s náhodonou y-ovou súradnicou
+            if pozicia_prekazky1[0] < -175:
+                nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
+                pozicia_prekazky1[0] = SIRKA + SIRKA_PODSTAVY//2
+                pozicia_prekazky1[1] = nova_pozicia
+            if pozicia_prekazky2[0] < -175:
+                nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
+                pozicia_prekazky2[0] = SIRKA + SIRKA_PODSTAVY//2
+                pozicia_prekazky2[1] = nova_pozicia
+            if pozicia_prekazky3[0] < -175:
+                nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
+                pozicia_prekazky3[0] = SIRKA + SIRKA_PODSTAVY//2
+                pozicia_prekazky3[1] = nova_pozicia
+            if pozicia_prekazky4[0] < -175:
+                nova_pozicia = randint(50+MEDZERA//2, VYSKA-MEDZERA//2)
+                pozicia_prekazky4[0] = SIRKA + SIRKA_PODSTAVY//2
+                pozicia_prekazky4[1] = nova_pozicia
+            #pohyb prekazok
+            pozicia_prekazky1[0] -= RYCHLOST * dt
+            pozicia_prekazky2[0] -= RYCHLOST * dt
+            pozicia_prekazky3[0] -= RYCHLOST * dt
+            pozicia_prekazky4[0] -= RYCHLOST * dt
+
+            if int(pozicia_hraca[0]) + SIRKA_HRACA//2 + SIRKA_PODSTAVY//2 > int(pozicia_prekazky1[0]) >int(pozicia_hraca[0]) - SIRKA_HRACA//2 - SIRKA_PODSTAVY//2:
+                if pozicia_prekazky1[1] - MEDZERA//2 + VYSKA_HRACA//2 > pozicia_hraca[1]:
+                    moznost_hrat[0] = 2
+                elif pozicia_hraca[1] > pozicia_prekazky1[1] + MEDZERA//2 - VYSKA_HRACA//2:
+                    moznost_hrat[0] = 2
+            if int(pozicia_hraca[0]) + SIRKA_HRACA//2 + SIRKA_PODSTAVY//2 > int(pozicia_prekazky2[0]) >int(pozicia_hraca[0]) - SIRKA_HRACA//2 - SIRKA_PODSTAVY//2:
+                if pozicia_prekazky2[1] - MEDZERA//2 + VYSKA_HRACA//2 > pozicia_hraca[1]:
+                    moznost_hrat[0] = 2
+                elif pozicia_hraca[1] > pozicia_prekazky2[1] + MEDZERA//2 - VYSKA_HRACA//2:
+                    moznost_hrat[0] = 2
+            if int(pozicia_hraca[0]) + SIRKA_HRACA//2 + SIRKA_PODSTAVY//2 > int(pozicia_prekazky3[0]) >int(pozicia_hraca[0]) - SIRKA_HRACA//2 - SIRKA_PODSTAVY//2:
+                if pozicia_prekazky3[1] - MEDZERA//2 + VYSKA_HRACA//2 > pozicia_hraca[1]:
+                    moznost_hrat[0] = 2
+                elif pozicia_hraca[1] > pozicia_prekazky3[1] + MEDZERA//2 - VYSKA_HRACA//2:
+                    moznost_hrat[0] = 2
+            if int(pozicia_hraca[0]) + SIRKA_HRACA//2 + SIRKA_PODSTAVY//2 > int(pozicia_prekazky4[0]) >int(pozicia_hraca[0]) - SIRKA_HRACA//2 - SIRKA_PODSTAVY//2:
+                if pozicia_prekazky4[1] - MEDZERA//2 + VYSKA_HRACA//2 > pozicia_hraca[1]:
+                    moznost_hrat[0] = 2
+                elif pozicia_hraca[1] > pozicia_prekazky4[1] + MEDZERA//2 - VYSKA_HRACA//2:
+                    moznost_hrat[0] = 2
+        else:
+            if stisknuta_klavesnica[0] == 1:
+                pozicia_hraca[0] = 100
+                pozicia_hraca[1] = 250
+                pozicia_prekazky1[0] = 800
+                pozicia_prekazky1[1] = 250
+                pozicia_prekazky2[0] = 1100
+                pozicia_prekazky2[1] = 200
+                pozicia_prekazky3[0] = 1400
+                pozicia_prekazky3[1] = 300
+                pozicia_prekazky4[0] = 1700
+                pozicia_prekazky4[1] = 100
+                body = 0
+                stisknuta_klavesnica[0] = 0
+                rychlost_hraca_y[0] = 1
+                moznost_skakat[0] = 1
+                moznost_hrat[0] = 0
+                zaciatok[0] = 0
+            
+            #pohyb hraca*************************
+        hrac.y = pozicia_hraca[1]
+        pozicia_hraca[1] = pozicia_hraca[1] + rychlost_hraca_y[0]
+        hrac.y = pozicia_hraca[1]
+        if pozicia_hraca[1] > 50:
+            rychlost_hraca_y[0] -= 0.5
+        hrac.x = pozicia_hraca[0]
+        if moznost_hrat[0] == 1:
+            if stisknuta_klavesnica[0] == 1:
+                if moznost_skakat[0] == 1:
+                    rychlost_hraca_y[0] = 6
+                    moznost_skakat[0] = 0
+        if pozicia_hraca[1] < 50:
+            pozicia_hraca[1] = 50
+            rychlost_hraca_y[0] = 0
+
+    
+def stisk_klavesnice(symbol, modifikatory):
+    if symbol == key.SPACE:
+        stisknuta_klavesnica[0] = 1
+        moznost_hrat[0] = 1
+        zaciatok[0] = 1
+    if symbol == key.UP:
+        stisknuta_klavesnica[0] = 1
+        moznost_hrat[0] = 1
+        zaciatok[0] = 1
+def pusti_klavesnice(symbol, modifikatory):
+    if symbol == key.SPACE:
+        stisknuta_klavesnica[0] = 0
+        moznost_skakat[0] = 1
+    if symbol == key.UP:
+        stisknuta_klavesnica[0] = 0
+        moznost_skakat[0] = 1
+
 
 window = pyglet.window.Window(width=SIRKA,height=VYSKA)
 window.push_handlers(
-    on_draw=vykresli
+    on_draw=vykresli,
+    on_key_press=stisk_klavesnice,
+    on_key_release=pusti_klavesnice
 )
 #nastavenie FPS na 60 kvôli výpočtom
 pyglet.clock.schedule_interval(obnov_stav, 1/60)
