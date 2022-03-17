@@ -2,7 +2,7 @@ import pyglet
 from pyglet import gl
 from random import randint
 from pyglet.window import key
-import time
+
 
 #OKNO
 SIRKA = 1000
@@ -245,21 +245,8 @@ def vykresli():
         nakresli_text("Press SPACE to RESTART", SIRKA//2, VYSKA//2 - 45, 'center')
     
 def obnov_stav(dt):
-    global pozicia_hraca
-    global pozicia_prekazky1
-    global pozicia_prekazky2
-    global pozicia_prekazky3
-    global pozicia_prekazky4
-    global body
-    global stisknuta_klavesnica
-    global rychlost_hraca_y
-    global moznost_skakat 
-    global moznost_hrat
-    global zaciatok
-    global najvyssie_skore
-    global moznost_ziskat_bod
-
-
+    global pozicia_hraca, pozicia_prekazky1, pozicia_prekazky2, pozicia_prekazky3, pozicia_prekazky4, body, stisknuta_klavesnica, rychlost_hraca_y, moznost_skakat, moznost_hrat, zaciatok, najvyssie_skore, moznost_ziskat_bod
+    
     if zaciatok[0] == 1:
         if moznost_hrat[0] == 1:
         #premiestnenie prekazok, keď prídu na koniec tak sa premiestnia na začiatok s náhodonou y-ovou súradnicou
@@ -280,7 +267,6 @@ def obnov_stav(dt):
                 pozicia_prekazky4[0] = SIRKA + SIRKA_PODSTAVY//2
                 pozicia_prekazky4[1] = nova_pozicia
             #pohyb prekazok
-            print(pozicia_prekazky1[0])
             pozicia_prekazky1[0] -= RYCHLOST * dt
             pozicia_prekazky2[0] -= RYCHLOST * dt
             pozicia_prekazky3[0] -= RYCHLOST * dt
@@ -289,31 +275,39 @@ def obnov_stav(dt):
             if int(pozicia_hraca[0]) + SIRKA_HRACA + SIRKA_PODSTAVY//2 > int(pozicia_prekazky1[0]) >int(pozicia_hraca[0]) - SIRKA_PODSTAVY//2:
                 if pozicia_prekazky1[1] - MEDZERA//2 + VYSKA_HRACA//2 > pozicia_hraca[1]:
                     moznost_hrat[0] = 2
-                    najvyssie_skore = body
+                    if body > najvyssie_skore:
+                        najvyssie_skore = body
                 elif pozicia_hraca[1] > pozicia_prekazky1[1] + MEDZERA//2 - VYSKA_HRACA//2:
                     moznost_hrat[0] = 2
-                    najvyssie_skore = body
+                    if body > najvyssie_skore:
+                        najvyssie_skore = body
             if int(pozicia_hraca[0]) + SIRKA_HRACA + SIRKA_PODSTAVY//2 > int(pozicia_prekazky2[0]) >int(pozicia_hraca[0]) - SIRKA_PODSTAVY//2:
                 if pozicia_prekazky2[1] - MEDZERA//2 + VYSKA_HRACA//2 > pozicia_hraca[1]:
                     moznost_hrat[0] = 2
-                    najvyssie_skore = body
+                    if body > najvyssie_skore:
+                        najvyssie_skore = body
                 elif pozicia_hraca[1] > pozicia_prekazky2[1] + MEDZERA//2 - VYSKA_HRACA//2:
                     moznost_hrat[0] = 2
-                    najvyssie_skore = body
+                    if body > najvyssie_skore:
+                        najvyssie_skore = body
             if int(pozicia_hraca[0]) + SIRKA_HRACA + SIRKA_PODSTAVY//2 > int(pozicia_prekazky3[0]) >int(pozicia_hraca[0]) - SIRKA_PODSTAVY//2:
                 if pozicia_prekazky3[1] - MEDZERA//2 + VYSKA_HRACA//2 > pozicia_hraca[1]:
                     moznost_hrat[0] = 2
-                    najvyssie_skore = body
+                    if body > najvyssie_skore:
+                        najvyssie_skore = body
                 elif pozicia_hraca[1] > pozicia_prekazky3[1] + MEDZERA//2 - VYSKA_HRACA//2:
                     moznost_hrat[0] = 2
-                    najvyssie_skore = body
+                    if body > najvyssie_skore:
+                        najvyssie_skore = body
             if int(pozicia_hraca[0]) + SIRKA_HRACA + SIRKA_PODSTAVY//2 > int(pozicia_prekazky4[0]) >int(pozicia_hraca[0]) - SIRKA_PODSTAVY//2:
                 if pozicia_prekazky4[1] - MEDZERA//2 + VYSKA_HRACA//2 > pozicia_hraca[1]:
                     moznost_hrat[0] = 2
-                    najvyssie_skore = body
+                    if body > najvyssie_skore:
+                        najvyssie_skore = body
                 elif pozicia_hraca[1] > pozicia_prekazky4[1] + MEDZERA//2 - VYSKA_HRACA//2:
                     moznost_hrat[0] = 2
-                    najvyssie_skore = body 
+                    if body > najvyssie_skore:
+                        najvyssie_skore = body 
             #kontrola bodov
             if int(pozicia_hraca[0]) + SIRKA_PODSTAVY >  pozicia_prekazky1[0] > int(pozicia_hraca[0]) - SIRKA_PODSTAVY//2:
                 if moznost_ziskat_bod == 1: 
@@ -340,7 +334,7 @@ def obnov_stav(dt):
             if pozicia_hraca[0] - SIRKA_HRACA*2 > pozicia_prekazky4[0] > pozicia_hraca[0] - SIRKA_HRACA*3:
                 moznost_ziskat_bod = 1
         else:
-            if stisknuta_klavesnica[0] == 1:
+            if stisknuta_klavesnica[0] == 1 and pozicia_hraca[1] == 50:
                 pozicia_hraca[0] = 100
                 pozicia_hraca[1] = 250
                 pozicia_prekazky1[0] = 800
